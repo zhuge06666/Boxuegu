@@ -1,6 +1,7 @@
 package cn.edu.gdmec.android.boxuegu.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import cn.edu.gdmec.android.boxuegu.R;
+import cn.edu.gdmec.android.boxuegu.View.MyInfoView;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     private FrameLayout mBodyLayout;
@@ -32,6 +34,7 @@ private ImageView iv_course;
     private TextView tv_back;
     private TextView tv_main_title;
     private RelativeLayout rl_title_bar;
+    private MyInfoView mMyInfoView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +92,13 @@ private ImageView iv_course;
                break;
            case 2:
                //我的界面
+               if (mMyInfoView==null){
+                   mMyInfoView=new MyInfoView(this);
+                   mBodyLayout.addView(mMyInfoView.getView());
+               }else {
+                   mMyInfoView.getView();
+               }
+               mMyInfoView.showView();
                break;
        }
    }
@@ -182,6 +192,21 @@ private ImageView iv_course;
                 selectDisplayView(2);
                 break;
                 default:break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data!=null){
+            boolean isLogin=data.getBooleanExtra("isLogin",false);
+            if (isLogin){
+                clearBottomImageState();
+                selectDisplayView(0);
+            }
+            if (mMyInfoView !=null){
+                mMyInfoView.setLoginParams(isLogin);
+            }
         }
     }
 }
