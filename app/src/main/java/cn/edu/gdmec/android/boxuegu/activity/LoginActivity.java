@@ -54,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         tv_find_psw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent=new Intent(LoginActivity.this,FindPswActivity.class);
+                startActivity(intent);
             }
         });
         btn_login.setOnClickListener(new View.OnClickListener() {
