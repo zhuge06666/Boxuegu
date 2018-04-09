@@ -21,7 +21,9 @@
         <activity android:name=".activity.SpiashActivity" />
         <activity android:name=".activity.SettingActivity" />
         <activity android:name=".activity.ModifyPswActivity" />
-        <activity android:name=".activity.FindPswActivity"></activity>
+        <activity android:name=".activity.FindPswActivity" />
+        <activity android:name=".activity.UserInfoActivity" />
+        <activity android:name=".activity.ChangeUserInfoActivity"></activity>
     </application>
 
 </manifest>

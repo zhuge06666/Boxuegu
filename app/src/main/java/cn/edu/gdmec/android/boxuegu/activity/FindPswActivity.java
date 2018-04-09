@@ -1,6 +1,7 @@
 package cn.edu.gdmec.android.boxuegu.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -17,12 +18,12 @@ import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
 import cn.edu.gdmec.android.boxuegu.utils.MD5Utils;
 
 public class FindPswActivity extends AppCompatActivity {
-private EditText et_validate_name,et_user_name;
-private Button btn_validate;
+private EditText et_validate_name,et_user_name,et_validate_reset_name;
+private Button btn_validate,btn_validate_set;
 private TextView tv_main_title;
 private TextView tv_back;
 private String from;
-private TextView tv_reset_psw,tv_user_name;
+private TextView tv_reset_psw,tv_user_name,tv_reset_psw2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +41,11 @@ private TextView tv_reset_psw,tv_user_name;
         tv_reset_psw=findViewById(R.id.tv_reset_psw);
         et_user_name=findViewById(R.id.et_user_name);
         tv_user_name=findViewById(R.id.tv_user_name);
+        et_validate_reset_name=findViewById(R.id.et_validate_reset_name);
+        tv_reset_psw2=findViewById(R.id.tv_reset_psw);
         if ("security".equals(from)){//设置密保
             tv_main_title.setText("设置密保");
+            btn_validate.setText("设置");
         }else {
             tv_main_title.setText("找回密码");
             tv_user_name.setVisibility(View.VISIBLE);
@@ -83,9 +87,14 @@ private TextView tv_reset_psw,tv_user_name;
                         Toast.makeText(FindPswActivity.this,"输入的密保不正确",Toast.LENGTH_LONG).show();
                    return;
                     }else {
-                        tv_reset_psw.setVisibility(View.VISIBLE);
-                        tv_reset_psw.setText("初始密码：123456");
-                        savePsw(userName);
+                        tv_reset_psw2.setVisibility(View.VISIBLE);
+                        et_validate_reset_name.setVisibility(View.VISIBLE);
+                        btn_validate.setText("确认修改");
+                        String newPsw=et_validate_reset_name.getText().toString().trim();
+                        if (!TextUtils.isEmpty(newPsw)){
+                            savePsw(userName,newPsw);
+                        }
+
                     }
                 }
             }
@@ -111,11 +120,12 @@ private TextView tv_reset_psw,tv_user_name;
         }
         return hasUserName;
     }
-    private void savePsw(String userName){
-        String md5Psw= MD5Utils.md5("123456");
+    private void savePsw(String userName,String newPsw){
+        String md5Psw= MD5Utils.md5(newPsw);
         SharedPreferences sp=getSharedPreferences("loginInfo",MODE_PRIVATE);
         SharedPreferences.Editor editor=sp.edit();
         editor.putString(userName,md5Psw);
         editor.commit();
+        FindPswActivity.this.finish();
     }
 }

@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,10 +16,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.gdmec.android.boxuegu.Fragment.MainViewMyinfoFragment;
 import cn.edu.gdmec.android.boxuegu.R;
 import cn.edu.gdmec.android.boxuegu.View.MyInfoView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends FragmentActivity implements View.OnClickListener{
     private FrameLayout mBodyLayout;
     public LinearLayout mBottomLayout;
 private View mCourseBtn;
@@ -44,6 +45,7 @@ private ImageView iv_course;
         initBottomBar();
         setListener();
         setInitStatus();
+        getSupportFragmentManager().beginTransaction().add(R.id.main_body,new MainViewMyinfoFragment()).commit();
     }
     private void init() {
         tv_back=findViewById(R.id.tv_back);
@@ -74,8 +76,8 @@ private ImageView iv_course;
     }
     private void setInitStatus() {
         clearBottomImageState();
-        setSelectedStatus(0);
-        createView(0);
+        setSelectedStatus(2);
+        createView(2);
     }
    private void selectDisplayView(int index){
         removeAllView();
@@ -92,13 +94,8 @@ private ImageView iv_course;
                break;
            case 2:
                //我的界面
-               if (mMyInfoView==null){
-                   mMyInfoView=new MyInfoView(this);
-                   mBodyLayout.addView(mMyInfoView.getView());
-               }else {
-                   mMyInfoView.getView();
-               }
-               mMyInfoView.showView();
+
+
                break;
        }
    }
@@ -155,6 +152,10 @@ private ImageView iv_course;
                 tv_course.setTextColor(Color.parseColor("#0097F7"));
                 rl_title_bar.setVisibility(View.VISIBLE);
                 tv_main_title.setText("博学谷课程");
+                tv_exercises.setTextColor(Color.parseColor("#666666"));
+                tv_myInfo.setTextColor(Color.parseColor("#666666"));
+                iv_exercises.setImageResource(R.drawable.main_exercises_icon);
+                iv_myInfo.setImageResource(R.drawable.main_my_icon);
                 break;
             case 1:
                 mExerciseBtn.setSelected(true);
@@ -162,12 +163,27 @@ private ImageView iv_course;
                 tv_exercises.setTextColor(Color.parseColor("#0097F7"));
                 rl_title_bar.setVisibility(View.VISIBLE);
                 tv_main_title.setText("博学谷习题");
+                tv_course.setTextColor(Color.parseColor("#666666"));
+                tv_myInfo.setTextColor(Color.parseColor("#666666"));
+                iv_course.setImageResource(R.drawable.main_course_icon);
+                iv_myInfo.setImageResource(R.drawable.main_my_icon);
                 break;
             case 2:
+         /*       if (mMyInfoView==null){
+                mMyInfoView=new MyInfoView(this);
+                mBodyLayout.addView(mMyInfoView.getView());
+            }else {
+                mMyInfoView.getView();
+            }
+            mMyInfoView.showView();*/
                 mMyInfoBtn.setSelected(true);
                 iv_myInfo.setImageResource(R.drawable.main_course_icon_selected);
                 tv_myInfo.setTextColor(Color.parseColor("#0097F7"));
                 rl_title_bar.setVisibility(View.GONE);
+                tv_course.setTextColor(Color.parseColor("#666666"));
+                tv_exercises.setTextColor(Color.parseColor("#666666"));
+                iv_course.setImageResource(R.drawable.main_course_icon);
+                iv_exercises.setImageResource(R.drawable.main_exercises_icon);
                 break;
         }
     }
@@ -180,16 +196,17 @@ private ImageView iv_course;
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.bottom_bar_course_btn:
-                clearBottomImageState();
+                //clearBottomImageState();
                 selectDisplayView(0);
                 break;
             case R.id.bottom_bar_exercises_btn:
-                clearBottomImageState();
+                //clearBottomImageState();
                 selectDisplayView(1);
                 break;
             case R.id.bottom_bar_myinfo_btn:
-                clearBottomImageState();
+                //clearBottomImageState();
                 selectDisplayView(2);
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_body,new MainViewMyinfoFragment()).commit();
                 break;
                 default:break;
         }
@@ -201,12 +218,13 @@ private ImageView iv_course;
         if (data!=null){
             boolean isLogin=data.getBooleanExtra("isLogin",false);
             if (isLogin){
-                clearBottomImageState();
-                selectDisplayView(0);
+               setSelectedStatus(2);
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_body,new MainViewMyinfoFragment()).commit();
+            }else {
+                setSelectedStatus(2);
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_body,new MainViewMyinfoFragment()).commit();
             }
-            if (mMyInfoView !=null){
-                mMyInfoView.setLoginParams(isLogin);
-            }
+
         }
     }
 }
