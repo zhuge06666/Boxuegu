@@ -26,11 +26,12 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
     private RelativeLayout rl_title_bar;
     private ImageView iv_head_icon;
     private RelativeLayout rl_head;
-    private TextView tv_user_name,tv_nickName,tv_sex,tv_signature;
-    private RelativeLayout rl_nickName,rl_sex,rl_signature;
+    private TextView tv_user_name,tv_nickName,tv_sex,tv_signature,tv_qq;
+    private RelativeLayout rl_nickName,rl_sex,rl_signature,rl_qq;
     private String spUserName;
     private static final int CHANGE_NICKNAME=1;
     private static final int CHANGE_SIGNATURE=2;
+    private static final int CHANGE_QQ=3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +55,8 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         rl_sex =  findViewById(R.id.rl_sex);
         tv_signature =  findViewById(R.id.tv_signature);
         rl_signature =  findViewById(R.id.rl_signature);
+        rl_qq=findViewById(R.id.rl_qq);
+        tv_qq=findViewById(R.id.tv_qq);
     }
     private void initData() {
         UserBean bean=null;
@@ -64,6 +67,7 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
             bean.nickName="问答精灵";
             bean.sex="男";
             bean.signature="问答精灵";
+            bean.qq="未添加";
             DBUtils.getInstance(this).saveUserInfo(bean);
         }
         setValue(bean);
@@ -73,12 +77,14 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
         tv_user_name.setText(bean.userName);
         tv_sex.setText(bean.sex);
         tv_signature.setText(bean.signature);
+        tv_qq.setText(bean.qq);
     }
     private void setListener() {
         tv_back.setOnClickListener(this);
         rl_nickName.setOnClickListener(this);
         rl_sex.setOnClickListener(this);
         rl_signature.setOnClickListener(this);
+        rl_qq.setOnClickListener(this);
     }
 
     @Override
@@ -106,6 +112,14 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                 bdSignature.putString("title","签名");
                 bdSignature.putInt("flag",2);
                 enterActivityForResult(ChangeUserInfoActivity.class,CHANGE_SIGNATURE,bdSignature);
+                break;
+            case R.id.rl_qq:
+                String qq=tv_qq.getText().toString();
+                Bundle bdqq=new Bundle();
+                bdqq.putString("content",qq);
+                bdqq.putString("title","QQ");
+                bdqq.putInt("flag",3);
+                enterActivityForResult(ChangeUserInfoActivity.class,CHANGE_QQ,bdqq);
                 break;
                 default:
                     break;
@@ -163,6 +177,16 @@ public class UserInfoActivity extends AppCompatActivity implements View.OnClickL
                     }
                     tv_signature.setText(new_info);
                     DBUtils.getInstance(UserInfoActivity.this).updateUserInfo("signature",new_info,spUserName);
+                }
+                break;
+            case CHANGE_QQ:
+                if (data!=null){
+                    new_info=data.getStringExtra("qq");
+                    if (TextUtils.isEmpty(new_info)){
+                        return;
+                    }
+                    tv_qq.setText(new_info);
+                    DBUtils.getInstance(UserInfoActivity.this).updateUserInfo("qq",new_info,spUserName);
                 }
                 break;
         }

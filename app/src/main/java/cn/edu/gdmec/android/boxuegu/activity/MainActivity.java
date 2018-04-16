@@ -16,8 +16,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.gdmec.android.boxuegu.Fragment.MainViewExercisesFragment;
 import cn.edu.gdmec.android.boxuegu.Fragment.MainViewMyinfoFragment;
 import cn.edu.gdmec.android.boxuegu.R;
+import cn.edu.gdmec.android.boxuegu.View.ExercisesView;
 import cn.edu.gdmec.android.boxuegu.View.MyInfoView;
 
 public class MainActivity extends FragmentActivity implements View.OnClickListener{
@@ -36,6 +38,7 @@ private ImageView iv_course;
     private TextView tv_main_title;
     private RelativeLayout rl_title_bar;
     private MyInfoView mMyInfoView;
+    private ExercisesView mExercisesView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -202,6 +205,14 @@ private ImageView iv_course;
             case R.id.bottom_bar_exercises_btn:
                 //clearBottomImageState();
                 selectDisplayView(1);
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_body,new MainViewExercisesFragment()).commit();
+             /*   if (mExercisesView==null){
+                    mExercisesView=new ExercisesView(this);
+                    mBodyLayout.addView(mExercisesView.getView());
+                }else {
+                    mExercisesView.getView();
+                }
+                mExercisesView.showView();*/
                 break;
             case R.id.bottom_bar_myinfo_btn:
                 //clearBottomImageState();
