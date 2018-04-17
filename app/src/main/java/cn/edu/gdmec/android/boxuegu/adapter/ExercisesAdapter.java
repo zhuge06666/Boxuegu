@@ -1,7 +1,9 @@
 package cn.edu.gdmec.android.boxuegu.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,11 +58,16 @@ public class ExercisesAdapter extends BaseAdapter{
    }else {
        vh= (ViewHolder) view.getTag();
    }
-        final ExercisesBean bean=getItem(position);
+      final ExercisesBean bean=getItem(position);
+      SharedPreferences sp=mContext.getSharedPreferences("Click",Context.MODE_PRIVATE);
+      boolean isFinish=sp.getBoolean("isFinish"+position,false);
        if (bean!=null){
            vh.order.setText(position+1+"");
            vh.title.setText(bean.title);
-           vh.content.setText(bean.content);
+           if (isFinish){
+               vh.content.setText("已经完成");
+           }else {
+            vh.content.setText(bean.content);}
            vh.order.setBackgroundResource(bean.background);
        }
        view.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +79,7 @@ public class ExercisesAdapter extends BaseAdapter{
                Intent intent=new Intent(mContext, ExercisesDetailActivity.class);
                intent.putExtra("id",bean.id);
                intent.putExtra("title",bean.title);
-               mContext.startActivity(intent);
+               ((Activity)mContext).startActivityForResult(intent,000);
            }
        });
 

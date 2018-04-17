@@ -1,14 +1,19 @@
 package cn.edu.gdmec.android.boxuegu.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +22,7 @@ import java.util.List;
 
 import cn.edu.gdmec.android.boxuegu.R;
 import cn.edu.gdmec.android.boxuegu.adapter.ExercisesDetailAdapter;
+import cn.edu.gdmec.android.boxuegu.adapter.ExercisesDetailListItemAdapter;
 import cn.edu.gdmec.android.boxuegu.bean.ExercisesBean;
 import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
 
@@ -30,7 +36,10 @@ public class ExercisesDetailActivity extends AppCompatActivity {
     private String title;
     private int id;
     private List<ExercisesBean> ebl;
-    private ExercisesDetailAdapter adapter;
+    private ExercisesDetailListItemAdapter adapter;
+    private RecyclerView rv_list;
+    private TextView tv_dibu;
+    private int clicknum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +67,15 @@ public class ExercisesDetailActivity extends AppCompatActivity {
         tv_main_title = (TextView) findViewById(R.id.tv_main_title);
         tv_save = (TextView) findViewById(R.id.tv_save);
         rl_title_bar = (RelativeLayout) findViewById(R.id.title_bar);
-        lv_list = (ListView) findViewById(R.id.lv_list);
+        tv_dibu=findViewById(R.id.tv_dibu);
+        //lv_list = (ListView) findViewById(R.id.lv_list);
         rl_title_bar.setBackgroundColor(Color.parseColor("#30B4FF"));
         TextView tv=new TextView(this);
         tv.setTextColor(Color.parseColor("#000000"));
         tv.setTextSize(16.0f);
         tv.setText("一、选择题");
         tv.setPadding(10,15,0,0);
-        lv_list.addHeaderView(tv);
+        //lv_list.addHeaderView(tv);
         tv_main_title.setText(title);
         tv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +83,7 @@ public class ExercisesDetailActivity extends AppCompatActivity {
                 ExercisesDetailActivity.this.finish();
             }
         });
-        adapter=new ExercisesDetailAdapter(ExercisesDetailActivity.this, new ExercisesDetailAdapter.OnSelectListener() {
+        adapter=new ExercisesDetailListItemAdapter(ExercisesDetailActivity.this, new ExercisesDetailListItemAdapter.OnSelectListener() {
             @Override
             public void onSelectA(int position, ImageView iv_a, ImageView iv_b, ImageView iv_c, ImageView iv_d) {
                 if (ebl.get(position).answer!=1){
@@ -182,6 +192,24 @@ public class ExercisesDetailActivity extends AppCompatActivity {
             }
         });
         adapter.setData(ebl);
-        lv_list.setAdapter(adapter);
+        rv_list=findViewById(R.id.rv_list);
+        rv_list.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        rv_list.setAdapter(adapter);
+        adapter.setItemClickListener(new ExercisesDetailListItemAdapter.MyItemClickListener() {
+            @Override
+            public void onItemClick(int position, View view) {
+                clicknum=clicknum+1;
+                tv_dibu.setText("第"+(position+1)+"题完成,共"+adapter.getItemCount()+"题");
+                Toast.makeText(ExercisesDetailActivity.this,clicknum+"",Toast.LENGTH_SHORT).show();
+                if (clicknum==5) {
+                    SharedPreferences sp = getSharedPreferences("Click",MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sp.edit();
+                    editor.putBoolean("isFinish"+(id-1),true);
+                    editor.commit();
+                    setResult(RESULT_OK);
+                }
+            }
+        });
     }
+
 }

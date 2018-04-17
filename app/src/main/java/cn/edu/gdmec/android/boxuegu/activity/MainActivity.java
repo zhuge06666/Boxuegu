@@ -235,7 +235,10 @@ private ImageView iv_course;
                 setSelectedStatus(2);
                 getSupportFragmentManager().beginTransaction().replace(R.id.main_body,new MainViewMyinfoFragment()).commit();
             }
-
+        }
+        if (requestCode==000){
+            setSelectedStatus(1);
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_body,new MainViewExercisesFragment()).commit();
         }
     }
 }
