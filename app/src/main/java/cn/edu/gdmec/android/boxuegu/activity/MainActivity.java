@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.edu.gdmec.android.boxuegu.Fragment.FragmentCourseFragment;
 import cn.edu.gdmec.android.boxuegu.Fragment.MainViewExercisesFragment;
 import cn.edu.gdmec.android.boxuegu.Fragment.MainViewMyinfoFragment;
 import cn.edu.gdmec.android.boxuegu.R;
@@ -153,7 +154,7 @@ private ImageView iv_course;
                 mCourseBtn.setSelected(true);
                 iv_course.setImageResource(R.drawable.main_course_icon_selected);
                 tv_course.setTextColor(Color.parseColor("#0097F7"));
-                rl_title_bar.setVisibility(View.VISIBLE);
+                rl_title_bar.setVisibility(View.GONE);
                 tv_main_title.setText("博学谷课程");
                 tv_exercises.setTextColor(Color.parseColor("#666666"));
                 tv_myInfo.setTextColor(Color.parseColor("#666666"));
@@ -201,6 +202,7 @@ private ImageView iv_course;
             case R.id.bottom_bar_course_btn:
                 //clearBottomImageState();
                 selectDisplayView(0);
+                getSupportFragmentManager().beginTransaction().replace(R.id.main_body,new FragmentCourseFragment()).commit();
                 break;
             case R.id.bottom_bar_exercises_btn:
                 //clearBottomImageState();
