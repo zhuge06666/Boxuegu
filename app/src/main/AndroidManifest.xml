@@ -24,7 +24,8 @@
         <activity android:name=".activity.FindPswActivity" />
         <activity android:name=".activity.UserInfoActivity" />
         <activity android:name=".activity.ChangeUserInfoActivity" />
-        <activity android:name=".activity.ExercisesDetailActivity"></activity>
+        <activity android:name=".activity.ExercisesDetailActivity"/>
+        <activity android:name=".activity.ActivityVideoListActivity"/>
     </application>
 
 </manifest>
