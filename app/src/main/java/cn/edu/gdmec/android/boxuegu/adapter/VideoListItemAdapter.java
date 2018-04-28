@@ -27,6 +27,7 @@ public class VideoListItemAdapter extends BaseAdapter {
   private DBUtils db;
     private Context context;
     private LayoutInflater layoutInflater;
+    private int a;
 
     public VideoListItemAdapter(Context context) {
         this.context = context;
