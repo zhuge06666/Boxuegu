@@ -1,6 +1,8 @@
 package cn.edu.gdmec.android.boxuegu.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.edu.gdmec.android.boxuegu.R;
+import cn.edu.gdmec.android.boxuegu.activity.ActivityVideoPlayActivity;
 import cn.edu.gdmec.android.boxuegu.bean.VideoBean;
 import cn.edu.gdmec.android.boxuegu.utils.AnalysisUtils;
 import cn.edu.gdmec.android.boxuegu.utils.DBUtils;
@@ -92,7 +95,12 @@ public class VideoListItemAdapter extends BaseAdapter {
                        if (readLoginStatus()){
                          String userName= AnalysisUtils.readLoginUserName(context);
                          db.saveVideoPlayList(objects.get(position),userName);
+
                        }
+                       Intent intent = new Intent(context, ActivityVideoPlayActivity.class);
+                       intent.putExtra("videoPath",videoPath);
+                       intent.putExtra("position",position);
+                       ((Activity)context).startActivityForResult(intent,1);
                    }
                 }
             }

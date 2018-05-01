@@ -87,7 +87,7 @@ public class DBUtils {
     private boolean hasVideoPlay(int chapterId,int videoId,String userName){
        boolean hasVideo=false;
        String sql="SELECT * FROM " +SQLiteHelper.U_VIDEO_PLAY_LIST+
-               "WHERE chapterId=? AND videoId=? AND userName=?";
+               " WHERE chapterId=? AND videoId=? AND userName=?";
        Cursor cursor =db.rawQuery(sql,new String[]{chapterId+"",videoId+"",userName});
        if (cursor.moveToNext()){
            hasVideo=true;
@@ -96,7 +96,7 @@ public class DBUtils {
        return hasVideo;
     }
     public List<VideoBean> getVideoHistory(String s){
-        String sql="SELECT * FROM "+SQLiteHelper.U_VIDEO_PLAY_LIST+"WHERE userName=";
+        String sql="SELECT * FROM "+SQLiteHelper.U_VIDEO_PLAY_LIST+" WHERE userName=?";
         Cursor cursor =db.rawQuery(sql,new String[]{s});
         List<VideoBean> vbl=new ArrayList<>();
         VideoBean bean=null;
