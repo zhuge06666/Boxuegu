@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.ListView;
@@ -115,10 +116,10 @@ public class ActivityVideoListActivity extends Activity  {
     private void initData() {
         JSONArray jsonArray;
         try {
-            InputStream is=getResources().getAssets().open("data.json");
+            InputStream is=getResources().getAssets().open("data1.json");
             jsonArray = new JSONArray(read(is));
             videoList=new ArrayList<VideoBean>();
-            for (int i=0;i<jsonArray.length();i++){
+     /*       for (int i=0;i<jsonArray.length();i++){
                 VideoBean bean=new VideoBean();
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
                 if (jsonObj.getInt("chapterId")==chapterId){
@@ -130,7 +131,27 @@ public class ActivityVideoListActivity extends Activity  {
                     videoList.add(bean);
                 }
                 bean=null;
-            }
+            }*/
+           for(int i=0;i<jsonArray.length();i++) {
+
+               JSONObject jsonObj = jsonArray.getJSONObject(i);
+               if (jsonObj.getInt("chapterId") == chapterId) {
+
+                   JSONArray ja = jsonObj.getJSONArray("data");
+                   for (int j = 0; j < ja.length(); j++) {
+                       VideoBean bean = new VideoBean();
+                       bean.chaterId = jsonObj.getInt("chapterId");
+                       JSONObject jsonObject = ja.getJSONObject(j);
+                       bean.videoId =jsonObject.getInt("videoId");
+                       bean.title = jsonObject.getString("title");
+                       bean.secondTitle = jsonObject.getString("secondTitle");
+                       bean.videoPath = jsonObject.getString("videoPath");
+                       videoList.add(bean);
+                       bean=null;
+                   }
+               }
+
+           }
         } catch (Exception e) {
             e.printStackTrace();
         }
